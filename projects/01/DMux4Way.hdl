@@ -17,4 +17,34 @@ CHIP DMux4Way {
 
     PARTS:
     // Put your code here:
+    //　分からないときは最初に言葉で説明してみる。
+    // 今で1bitしか扱わなかったのに2bitになっているから処理の仕方が分からない。
+    // 2bitでもandやorはできるだろうか？
+    // こういうふうに考えてみる。
+    /**
+     * 4-way demultiplexor: デマルチプレクサー
+     * {a, b, c, d} = {in, 0, 0, 0} if sel[0] == 0 and sel[1] == 0
+     *                {0, in, 0, 0} if sel[0] == 1 and sel[1] == 0
+     *                {0, 0, in, 0} if sel[0] == 0 and sel[1] == 1
+     *                {0, 0, 0, in} if sel[0] == 1 and sel[1] == 1
+     */
+     // selを2bitから1bitを2つに変更する。
+     // このように分解して、in=1の式をそれぞれみつけだす。
+     // aBC abC aBc abc= a(BC+bC+Bc+bc)=a(B(C+c)+b(C+c)) ああ、これは次元が違うからできない。
+     // Not(in=in, out=nota);
+     // Not(in=sel[0], out=notb);
+     // Not(in=sel[1], out=notc);
+     // And(a=in, b=notb, out=w1);
+     // And(a=w1, b=notc, out=a);
+     // And(a=in, b=sel[0], out=w2);
+     // And(a=w2, b=notc, out=b);
+     // And(a=in, b=notb, out=w3);
+     // And(a=w3, b=sel[1], out=c);
+     // And(a=in, b=sel[0], out=w4);
+     // And(a=w4, b=sel[1], out=d);
+
+
+
+
+
 }

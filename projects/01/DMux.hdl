@@ -15,4 +15,19 @@ CHIP DMux {
 
     PARTS:
     // Put your code here:
+    // 入直する値はinとselの２つあり、出てくるものは0とinの値である。
+    // ただし、selの値によって、0とinの場所が異なる。
+
+    // in sel  output1 output3
+    // 1   0     1       0
+    // 0   0     0       0
+    // 1   1     0       1
+    // 0   1     0       0
+    // つまりaとSELの時、output1=1
+    // 　　　aとselの時、output2=1
+    // 肝は出力値を2つに分けて考える事。
+
+    Not(in=sel, out=notsel);
+    And(a=in, b=notsel, out=a);
+    And(a=in, b=sel, out=b);
 }
