@@ -14,4 +14,24 @@ CHIP FullAdder {
 
     PARTS:
     // Put you code here:
+    // 期待する出力を自分で考えることが一番の近道である。
+    // これは3bit加算器である。
+    //
+
+    // 最初はhalfadderを使わず、正準表現を使おうとした。
+    // 2番目はこれ。
+    // HalfAdder(a=a, b=b, sum=sumout, carry=carryout);
+    // HalfAdder(a=sumout, b=c, sum=sum, carry=carryout1);
+    // HalfAdder(a=carryout, b=c, sum=sumout1, carry=carry);
+    // 3番目は
+    // halfadderを使う。
+    // fulladderでは何ビット生まれるか？
+    HalfAdder(a=a, b=b, sum=sumout1, carry=carryout1);
+    HalfAdder(a=a, b=c, sum=sumout2, carry=carryout2);
+    HalfAdder(a=b, b=c, sum=sumout3, carry=carryout3);
+    Xor(a=sumout1,b=c, out=sum);
+    Or(a=carryout1, b=carryout2, out=w1);
+    Or(a=carryout1, b=carryout3, out=w2);
+    Or(a=w1, b=w2, out=carry);
+
 }
