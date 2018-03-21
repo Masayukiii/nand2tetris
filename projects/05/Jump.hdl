@@ -11,24 +11,21 @@ CHIP Jump {
 
     IN  zr,
         ng,
-        j1, j2, j3
+        j1, j2, j3;
 
-    OUT out
+    OUT out;
 
     PARTS:
     // Put your code here:
-    Xor(a=ng, b=j1, out=w1);
-    Xor(a=zr, b=j2, out=w2);
-    Not(in=w1,out=nagative);
-    Not(in=w2,out=zero);
+    And(a=ng, b=j1, out=w1);
+    And(a=zr, b=j2, out=w2);
 
-    // confirm positive?
-    Or(a=ng,b=zr, out=w3);
-    Not(in=w3, out=w4);
-    Xor(a=w4, b=j3, out=w5);
-    Not(in=w5,out=positive);
+    // positive value
+    Xor(a=ng,b=zr, out=w3);
+    Not(in=w3, out=ps);
 
-    // if all are true, return condition is OK.
-    And(a=nagative, b=zero, out=w6);
-    And(a=w6, b=positive, out=out);
+    And(a=ps, b=j3, out=w4);
+    Or(a=w1, b=w2, out=w5);
+    Or(a=w5, b=w4, out=out);
+
 }

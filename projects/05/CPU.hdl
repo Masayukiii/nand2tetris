@@ -40,30 +40,31 @@ CHIP CPU {
 
     PARTS:
     // Put your code here:
-    Decode(in=instruction, i=i, a=a, c[6]=c, d1=d1, d2=d2, d3=d3, j1=j1, j2=j2, j3=j3);
+    Decode(in=instruction, i=i, a=a, c1=c1, c2=c2, c3=c3, c4=c4, c5=c5, c6=c6, d1=d1, d2=d2, d3=d3, j1=j1, j2=j2, j3=j3);
 
     // rewrite  value of memory[A]?
     And(a=d3, b=d3, out=writeM);
 
     // A register
-    Or(a=i, b=d1, out=load-a-register);
-    Register(in=a-c-muxout , load=load-a-register, out=a-register-out);
+    Not(in=i, out=noti);
+    Or(a=noti, b=d1, out=load-a-register);
+    ARegister(in=a-c-muxout , load=load-a-register, out=a-register-out);
     Normalization15(in=a-register-out, out=addressM);
 
     // Value of a register or Value of memory
-    Mux16(a=a-register-out, b=inM, out=a-m-muxout);
+    Mux16(a=a-register-out, b=inM, sel=a, out=a-m-muxout);
 
     // calculate by ALU
-    ALU(x=d-register-out, y=muxout, zx=c[0], nx=c[1], zy=c[2], ny=[3], f=c[4], no=c[5], out=alu-out, zr=zr, ng=ng);
+    ALU(x=d-register-out, y=a-m-muxout, zx=c1, nx=c2, zy=c3, ny=c4, f=c5, no=c6, out=alu-out, zr=zr, ng=ng);
 
     // output new value of memory
     And16(a=alu-out, b=alu-out, out=outM);
 
     // D register
-    Register(in=alu-out, load=d2, out=d-register-out);
+    DRegister(in=alu-out, load=d2, out=d-register-out);
 
     // A instruction or C instruction
-    Mux16(a=instruction, b=alu-out, load=i, out=a-c-muxout);
+    Mux16(a=instruction, b=alu-out, sel=i, out=a-c-muxout);
 
     // confirm jump condition is true
     Jump(zr=zr, ng=ng, j1=j1, j2=j2, j3=j3, out=jump-load);

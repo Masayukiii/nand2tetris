@@ -9,40 +9,42 @@
 
 CHIP Decode {
 
-    IN  in[16]
+    IN  in[16];
 
-    OUT i, a, c[6], d1, d2, d3, j1, j2, j3
+    OUT i, a, c1, c2, c3, c4, c5, c6, d1, d2, d3, j1, j2, j3;
 
     PARTS:
-    And(a=in[0], b=in[0], out=i);
-    And(a=in[3], b=in[3], out=w1);
-    And(a=in[4], b=in[4], out=w2);
-    And(a=in[5], b=in[5], out=w3);
-    And(a=in[6], b=in[6], out=w4);
-    And(a=in[7], b=in[7], out=w5);
-    And(a=in[8], b=in[8], out=w6);
-    And(a=in[9], b=in[9], out=w7);
-    And(a=in[10], b=in[10], out=w8);
-    And(a=in[11], b=in[11], out=w9);
-    And(a=in[12], b=in[12], out=w10);
-    And(a=in[13], b=in[13], out=w11);
-    And(a=in[14], b=in[14], out=w12);
-    And(a=in[15], b=in[15], out=w13);
+    // これ逆だ2進数だと反対になる
+    And(a=in[15], b=in[15], out=i-out);
+    And(a=i-out, b=i-out, out=i);
+    And(a=in[12], b=in[12], out=w1);
+    And(a=in[11], b=in[11], out=w2);
+    And(a=in[10], b=in[10], out=w3);
+    And(a=in[9], b=in[9], out=w4);
+    And(a=in[8], b=in[8], out=w5);
+    And(a=in[7], b=in[7], out=w6);
+    And(a=in[6], b=in[6], out=w7);
+    And(a=in[5], b=in[5], out=w8);
+    And(a=in[4], b=in[4], out=w9);
+    And(a=in[3], b=in[3], out=w10);
+    And(a=in[2], b=in[2], out=w11);
+    And(a=in[1], b=in[1], out=w12);
+    And(a=in[0], b=in[0], out=w13);
 
     // if instruction type is A,
     // decode 0 not to  store.
-    And(a=w1, b=i, out=a);
-    And(a=w1, b=i, out=c[0]);
-    And(a=w1, b=i, out=c[1]);
-    And(a=w1, b=i, out=c[2]);
-    And(a=w1, b=i, out=c[3]);
-    And(a=w1, b=i, out=c[4]);
-    And(a=w1, b=i, out=c[5]);
-    And(a=w1, b=i, out=d1);
-    And(a=w1, b=i, out=d2);
-    And(a=w1, b=i, out=d3);
-    And(a=w1, b=i, out=j1);
-    And(a=w1, b=i, out=j2);
-    And(a=w1, b=i, out=j3);
+    And(a=w1,  b=i-out, out=a);
+    And(a=w2,  b=i-out, out=c1);
+    And(a=w3,  b=i-out, out=c2);
+    And(a=w4,  b=i-out, out=c3);
+    And(a=w5,  b=i-out, out=c4);
+    And(a=w6,  b=i-out, out=c5);
+    And(a=w7,  b=i-out, out=c6);
+    And(a=w8,  b=i-out, out=d1);
+    And(a=w9,  b=i-out, out=d2);
+    And(a=w10, b=i-out, out=d3);
+    And(a=w11, b=i-out, out=j1);
+    And(a=w12, b=i-out, out=j2);
+    And(a=w13, b=i-out, out=j3);
 
 }
