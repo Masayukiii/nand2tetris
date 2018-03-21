@@ -1,0 +1,34 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/05/CPU.hdl
+
+/**
+ * Jump gete will confirm that condition is true or false.
+ */
+
+CHIP Jump {
+
+    IN  zr,
+        ng,
+        j1, j2, j3
+
+    OUT out
+
+    PARTS:
+    // Put your code here:
+    Xor(a=ng, b=j1, out=w1);
+    Xor(a=zr, b=j2, out=w2);
+    Not(in=w1,out=nagative);
+    Not(in=w2,out=zero);
+
+    // confirm positive?
+    Or(a=ng,b=zr, out=w3);
+    Not(in=w3, out=w4);
+    Xor(a=w4, b=j3, out=w5);
+    Not(in=w5,out=positive);
+
+    // if all are true, return condition is OK.
+    And(a=nagative, b=zero, out=w6);
+    And(a=w6, b=positive, out=out);
+}

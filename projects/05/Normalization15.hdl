@@ -1,0 +1,49 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/05/CPU.hdl
+
+/**
+ *  decode instructions.
+ */
+
+CHIP Normalization15 {
+
+    IN  in[16]
+
+    OUT out[15]
+
+    PARTS:
+    And(a=in[0], b=in[0], out=[0]);
+    And(a=in[1], b=in[1], out=[1]);
+    And(a=in[2], b=in[2], out=[2]);
+    And(a=in[3], b=in[3], out=[3]);
+    And(a=in[4], b=in[4], out=[4]);
+    And(a=in[5], b=in[5], out=[5]);
+    And(a=in[6], b=in[6], out=[6]);
+    And(a=in[7], b=in[7], out=[7]);
+    And(a=in[8], b=in[8], out=[8]);
+    And(a=in[9], b=in[9], out=[9]);
+    And(a=in[10], b=in[10], out=[10]);
+    And(a=in[11], b=in[11], out=[11]);
+    And(a=in[12], b=in[12], out=[12]);
+    And(a=in[13], b=in[13], out=[13]);
+    And(a=in[14], b=in[14], out=[14]);
+
+    // if instruction type is A,
+    // decode 0 not to  store.
+    And(a=w1, b=i, out=a);
+    And(a=w1, b=i, out=c[0]);
+    And(a=w1, b=i, out=c[1]);
+    And(a=w1, b=i, out=c[2]);
+    And(a=w1, b=i, out=c[3]);
+    And(a=w1, b=i, out=c[4]);
+    And(a=w1, b=i, out=c[5]);
+    And(a=w1, b=i, out=d1);
+    And(a=w1, b=i, out=d2);
+    And(a=w1, b=i, out=d3);
+    And(a=w1, b=i, out=j1);
+    And(a=w1, b=i, out=j2);
+    And(a=w1, b=i, out=j3);
+
+}
