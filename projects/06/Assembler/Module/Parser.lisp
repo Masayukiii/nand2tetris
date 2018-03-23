@@ -1,5 +1,7 @@
 
 (defun parse (line)
+  (declare (special line))
+  (list commnadType dest comp jump)
 )
 
 (defun deleteWhitespaceAndComment (file)
@@ -25,20 +27,28 @@
   (or (ppcre:scan "^//" line) (eq (length line) 0))
 )
 
-(defun hasMoreCommands ()
-)
+; While reach EOF, continuing parse.
+;(defun hasMoreCommands ()
+;)
+;(defun advance ()
+;)
 
-(defun advance ()
+(defun commandType ()
+  (declare (special line))
 )
 
 (defun symbol ()
+  (declare (special line))
 )
 
 (defun dest ()
+  (declare (special line))
 )
 
 (defun comp ()
+  (declare (special line))
 )
 
 (defun jump ()
+  (declare (special line))
 )
