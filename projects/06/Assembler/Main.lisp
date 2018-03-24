@@ -2,8 +2,7 @@
 (load "Init.lisp")
 (format t "success~%")
 
-(format t "please input fine name~%")
-(setf file (string (read)))
+(setf file (car *args*))
 
 ;generate swp file not including whitespace and any comments.
 (deleteWhitespaceAndComment file)
@@ -31,3 +30,4 @@
 
 (close input-stream)
 (close output-stream)
+(delete-file (probe-file swp-file))
