@@ -13,3 +13,23 @@
 (format t "now loading SymbolTable module~%")
 (load "Module/SymbolTable.lisp")
 (format t "success~%")
+
+(format t "now loading InstructionTable module~%")
+(load "Module/InstructionTable.lisp")
+(format t "success~%")
+
+
+(format t "#############################~%")
+(format t "now creating jump-mnemonic-table~%")
+(make-jump-mnemonic-table)
+(format t "#############################~%")
+
+(format t "#############################~%")
+(format t "now creating dest-mnemonic-table~%")
+(make-dest-mnemonic-table)
+(format t "#############################~%")
+
+(format t "#############################~%")
+(format t "now creating comp-mnemonic-table~%")
+(make-comp-mnemonic-table)
+(format t "#############################~%")

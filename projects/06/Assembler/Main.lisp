@@ -23,8 +23,10 @@
   (setf line (read-line input-stream nil :EOF))
   (cond((eq line :EOF) (return t)(format t "finished assembling~%")))
   (format t " now assembind ~a~%" line)
-;  (code (parse line))
-;  (write)
+  (parse line)
+  (setf binary (code))
+  (format t "~a" binary)
+  (format output-stream (concatenate 'string binary "~%"))
 )
 
 (close input-stream)
