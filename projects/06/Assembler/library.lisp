@@ -5,7 +5,6 @@
     (load quicklisp-init)))
 (format t "success~%")
 
-
 (format t "now loading cl-ppcre for regular expression~%")
 (ql:quickload :cl-ppcre)
 (format t "success~%")

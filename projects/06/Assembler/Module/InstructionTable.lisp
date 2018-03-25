@@ -48,7 +48,7 @@
   (setf (gethash "M+1"  *comp-mnemonic-table*) "1110111")
   (setf (gethash "M-1"  *comp-mnemonic-table*) "1110010")
   (setf (gethash "D+M"  *comp-mnemonic-table*) "1000010")
-  (setf (gethash "D-M"  *comp-mnemonic-table*) "1001011")
+  (setf (gethash "D-M"  *comp-mnemonic-table*) "1010011")
   (setf (gethash "M-D"  *comp-mnemonic-table*) "1000111")
   (setf (gethash "D&M"  *comp-mnemonic-table*) "1000000")
   (setf (gethash "D|M"  *comp-mnemonic-table*) "1010101")

@@ -18,7 +18,6 @@
 (load "Module/InstructionTable.lisp")
 (format t "success~%")
 
-
 (format t "#############################~%")
 (format t "now creating jump-mnemonic-table~%")
 (make-jump-mnemonic-table)
@@ -32,4 +31,10 @@
 (format t "#############################~%")
 (format t "now creating comp-mnemonic-table~%")
 (make-comp-mnemonic-table)
+(format t "#############################~%")
+
+(format t "#############################~%")
+(format t "now creating symbol-table~%")
+(format t "you can rewrite this table by defining new symbol~%")
+(make-symbol-table)
 (format t "#############################~%")
