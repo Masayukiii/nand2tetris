@@ -13,6 +13,5 @@
   (cond
     ((string= (commandType) "A_COMMAND") (address))
     ((string= (commandType) "C_COMMAND") (concatenate 'string "111" (comp) (dest) (jump)))
-    ((string= (commandType) "L_COMMAND") (label-symbol))
     )
   )

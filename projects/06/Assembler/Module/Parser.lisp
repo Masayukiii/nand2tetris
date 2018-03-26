@@ -75,6 +75,8 @@
 
 (defun address ()
   (declare (special line))
+  (format t "☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆~%")
+  (format t "~a~%" line)
   (cond
     ((ppcre:scan "^@[0-9]+$" line)(convert_to_binary))
     (t (getAddress (ppcre:scan-to-strings "[^@]+" line)))
@@ -102,10 +104,4 @@
     ((<= i 0) y)
     (t (generate-zero-string (1- i) (concatenate 'string y "0")))
   )
-)
-
-(defun label-symbol ()
-  (declare (special line))
-  (setf label (ppcre:scan-to-strings "[^(^)]+" line))
-  (addEntry label (generate_binary (1+ *line-count*)))
 )

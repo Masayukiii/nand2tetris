@@ -25,6 +25,39 @@
   (setf (gethash "R15"     *symbol-table*) "0000000000001111")
 )
 
+(defparameter *line-count* 0)
+
+(defun init-symbol (swp-file swp-swp-file)
+  (setf input-stream  (open swp-file :direction :input))
+  (setf output-stream (open swp-swp-file :direction :output))
+  (loop
+    (setf line (read-line input-stream nil :EOF))
+    (if (eq line :EOF) (return t))
+    (parse line)
+    (cond
+      ((string= (commandType) "L_COMMAND") (label-symbol))
+      (t (format output-stream (concatenate 'string line "~%")))
+    )
+    (inc-line-count)
+  )
+  (close input-stream)
+  (close output-stream)
+)
+
+(defun label-symbol ()
+  (declare (special line))
+  (setf label (ppcre:scan-to-strings "[^(^)]+" line))
+  (addEntry label (generate_binary  *line-count*))
+)
+
+(defun inc-line-count ()
+  (cond
+    ((string= (commandType) "L_COMMAND") t)
+    (t (defparameter *line-count* (1+ *line-count*)))
+    )
+  )
+
+
 (defun addEntry (symbol address)
   ; add symbol and address to symbol table.
   (setf (gethash symbol *symbol-table*) address)
@@ -36,7 +69,7 @@
 
 (defun getAddress (symbol)
   ; return address via symbol table
-  (format t "not getting address!! ~%")
+  (format t "○○○○○○○○○○○○○○○○○○○○○○○○~%")
   (format t "~a~%" (gethash symbol *symbol-table*))
   (gethash symbol *symbol-table*)
 )
