@@ -12,7 +12,7 @@
     (cond ((eq line :EOF)(return t)(format t "finish delete whitespaces and comments")))
     (cond
       ((comment-or-whitespace-p line) (format t "...~%")) ;is this line comments or whitespace?
-      (t (setf line (ppcre:scan-to-strings "[^\\s+]+" line))(format swap-stream "~a~%" line))
+      (t (setf line (ppcre:scan-to-strings "[^\\s]+" line))(format swap-stream "~a~%" line))
     )
   )
   (format t "--------------------------finish deleting whitespace and comments-------------------------------~%")
@@ -93,7 +93,7 @@
 
 (defun generate_binary (i)
   (let*
-    ((binary (format nil "~b" i))
+    ((binary (format nil "~b" (parse-integer i)))
      (shortage-zero-count (- 16 (length binary))))
     (concatenate 'string (generate-zero-string shortage-zero-count nil) binary)
   )

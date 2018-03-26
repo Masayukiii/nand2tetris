@@ -18,6 +18,10 @@
 (load "Module/InstructionTable.lisp")
 (format t "success~%")
 
+(format t "now loading RomTable module~%")
+(load "Module/RomTable.lisp")
+(format t "success~%")
+
 (format t "#############################~%")
 (format t "now creating jump-mnemonic-table~%")
 (make-jump-mnemonic-table)
@@ -37,4 +41,9 @@
 (format t "now creating symbol-table~%")
 (format t "you can rewrite this table by defining new symbol~%")
 (make-symbol-table)
+(format t "#############################~%")
+
+(format t "#############################~%")
+(format t "now creating rom-table~%")
+(make-rom-table)
 (format t "#############################~%")

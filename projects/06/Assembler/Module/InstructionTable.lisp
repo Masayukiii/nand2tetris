@@ -18,7 +18,7 @@
   (setf (gethash "MD"   *dest-mnemonic-table*) "011")
   (setf (gethash "A"    *dest-mnemonic-table*) "100")
   (setf (gethash "AM"   *dest-mnemonic-table*) "101")
-  (setf (gethash "AD"   *dest-mnemonic-table*) "111")
+  (setf (gethash "AD"   *dest-mnemonic-table*) "110")
   (setf (gethash "AMD"  *dest-mnemonic-table*) "111")
 )
 

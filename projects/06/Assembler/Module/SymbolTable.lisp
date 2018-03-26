@@ -47,7 +47,7 @@
 (defun label-symbol ()
   (declare (special line))
   (setf label (ppcre:scan-to-strings "[^(^)]+" line))
-  (addEntry label (generate_binary  *line-count*))
+  (addEntry label (generate_binary  (write-to-string *line-count*) ))
 )
 
 (defun inc-line-count ()
@@ -71,5 +71,16 @@
   ; return address via symbol table
   (format t "○○○○○○○○○○○○○○○○○○○○○○○○~%")
   (format t "~a~%" (gethash symbol *symbol-table*))
-  (gethash symbol *symbol-table*)
+  (setf symbol-value (gethash symbol *symbol-table*))
+  (cond
+    ((null symbol-value) (addVaribleSymbol symbol))
+    (t symbol-value)
+  )
+)
+
+(defun addVaribleSymbol (symbol)
+  (setf rom-count (hash-table-count *rom-table*))
+  (setf rom-address (generate_binary (write-to-string rom-count)))
+  (setf (gethash symbol *rom-table*) rom-address)
+  (setf (gethash symbol *symbol-table*) rom-address)
 )
