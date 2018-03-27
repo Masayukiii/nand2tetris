@@ -16,9 +16,6 @@
 (setf b-file (concatenate 'string file-name ".hack"))
 
 (init-symbol swp-file swp-swp-file)
-; @screen.1などのa命令は変数を表しているので、
-; ram(16 > x)の開いてる番地を順に指定して、シンボルテーブルに挿入する。
-;仕様書とだいぶ様相が違う。
 
 ; open stream
 (setf input-stream (open swp-swp-file :direction :input))
