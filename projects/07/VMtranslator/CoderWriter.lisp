@@ -5,7 +5,6 @@
 )
 
 (in-package :vmtranslator.coderwriter)
-(defvar *filename*　"BasicTest.")
 
 (defun code (lineLists)
   (convertPushPopAssmble (convertArithmeticAssmble lineLists))
@@ -39,17 +38,18 @@
 
 (defun arithmeticAssemblerList (line)
   (let ((label1 (string (gensym))) (label2 (string (gensym))))
-  (cond
-    ((string= (arg1 line) "add")(list  "@R0" "M=M-1" "A=M" "D=M" "@R0" "M=M-1" "A=M" "M=M+D" "@R0" "M=M+1"))
-    ((string= (arg1 line) "sub")(list  "@R0" "M=M-1" "A=M" "D=M" "@R0" "M=M-1" "A=M" "M=M-D" "@R0" "M=M+1"))
-    ((string= (arg1 line) "neg")(list  "@R0" "M=M-1" "A=M" "M=-M" "@R0" "M=M+1"))
-    ((string= (arg1 line) "eq" )(list  "@R0" "M=M-1" "A=M" "D=M" "@R0" "M=M-1" "A=M" "D=M-D"  (concatenate 'string "@" label1) "D;JEQ" "@R0" "A=M" "M=0" "@R0" "M=M+1" (concatenate 'string "@" label2) "0;JMP" (concatenate 'string "(" label1 ")") "@R0" "A=M" "M=-1" "@R0" "M=M+1" (concatenate 'string "(" label2 ")") ))
-    ((string= (arg1 line) "gt" )(list  "@R0" "M=M-1" "A=M" "D=M" "@R0" "M=M-1" "A=M" "D=M-D"  (concatenate 'string "@" label1) "D;JGT" "@R0" "A=M" "M=0" "@R0" "M=M+1" (concatenate 'string "@" label2) "0;JMP" (concatenate 'string "(" label1 ")") "@R0" "A=M" "M=-1" "@R0" "M=M+1" (concatenate 'string "(" label2 ")") ))
-    ((string= (arg1 line) "lt" )(list  "@R0" "M=M-1" "A=M" "D=M" "@R0" "M=M-1" "A=M" "D=M-D"  (concatenate 'string "@" label1) "D;JLT" "@R0" "A=M" "M=0" "@R0" "M=M+1" (concatenate 'string "@" label2) "0;JMP" (concatenate 'string "(" label1 ")") "@R0" "A=M" "M=-1" "@R0" "M=M+1" (concatenate 'string "(" label2 ")") ))
-    ((string= (arg1 line) "and")(list  "@R0" "M=M-1" "A=M" "D=M" "@R0" "M=M-1" "A=M" "M=D&M" "@R0" "M=M+1"))
-    ((string= (arg1 line) "or" )(list  "@R0" "M=M-1" "A=M" "D=M" "@R0" "M=M-1" "A=M" "M=D|M" "@R0" "M=M+1"))
-    ((string= (arg1 line) "not")(list "@R0" "M=M-1" "A=M" "M=!M" "@R0" "M=M+1"))
-  ))
+    (cond
+      ((string= (arg1 line) "add")(list  "@R0" "M=M-1" "A=M" "D=M" "@R0" "M=M-1" "A=M" "M=M+D" "@R0" "M=M+1"))
+      ((string= (arg1 line) "sub")(list  "@R0" "M=M-1" "A=M" "D=M" "@R0" "M=M-1" "A=M" "M=M-D" "@R0" "M=M+1"))
+      ((string= (arg1 line) "neg")(list  "@R0" "M=M-1" "A=M" "M=-M" "@R0" "M=M+1"))
+      ((string= (arg1 line) "eq" )(list  "@R0" "M=M-1" "A=M" "D=M" "@R0" "M=M-1" "A=M" "D=M-D"  (concatenate 'string "@" label1) "D;JEQ" "@R0" "A=M" "M=0" "@R0" "M=M+1" (concatenate 'string "@" label2) "0;JMP" (concatenate 'string "(" label1 ")") "@R0" "A=M" "M=-1" "@R0" "M=M+1" (concatenate 'string "(" label2 ")") ))
+      ((string= (arg1 line) "gt" )(list  "@R0" "M=M-1" "A=M" "D=M" "@R0" "M=M-1" "A=M" "D=M-D"  (concatenate 'string "@" label1) "D;JGT" "@R0" "A=M" "M=0" "@R0" "M=M+1" (concatenate 'string "@" label2) "0;JMP" (concatenate 'string "(" label1 ")") "@R0" "A=M" "M=-1" "@R0" "M=M+1" (concatenate 'string "(" label2 ")") ))
+      ((string= (arg1 line) "lt" )(list  "@R0" "M=M-1" "A=M" "D=M" "@R0" "M=M-1" "A=M" "D=M-D"  (concatenate 'string "@" label1) "D;JLT" "@R0" "A=M" "M=0" "@R0" "M=M+1" (concatenate 'string "@" label2) "0;JMP" (concatenate 'string "(" label1 ")") "@R0" "A=M" "M=-1" "@R0" "M=M+1" (concatenate 'string "(" label2 ")") ))
+      ((string= (arg1 line) "and")(list  "@R0" "M=M-1" "A=M" "D=M" "@R0" "M=M-1" "A=M" "M=D&M" "@R0" "M=M+1"))
+      ((string= (arg1 line) "or" )(list  "@R0" "M=M-1" "A=M" "D=M" "@R0" "M=M-1" "A=M" "M=D|M" "@R0" "M=M+1"))
+      ((string= (arg1 line) "not")(list "@R0" "M=M-1" "A=M" "M=!M" "@R0" "M=M+1"))
+    )
+  )
 )
 
 
@@ -67,25 +67,25 @@
 (defun writePush (segment index)
   (cond
    ((string= segment "constant") (list (concatenate 'string "@" index) "D=A" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
-   ((string= segment "local")    (list "@R1" "D=M" (concatenate 'string  "@" index)  "D=D+A" "A=D" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
-   ((string= segment "argument") (list "@R2" "D=M" (concatenate 'string  "@" index)  "D=D+A" "A=D" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
-   ((string= segment "this")     (list "@R3" "D=M" (concatenate 'string  "@" index)  "D=D+A" "A=D" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
-   ((string= segment "that")     (list "@R4" "D=M" (concatenate 'string  "@" index)  "D=D+A" "A=D" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
-   ((string= segment "pointer")  (list "@R3" "D=M" (concatenate 'string  "@" index)  "D=D+A" "A=D" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
-   ((string= segment "temp")     (list "@R5" "D=M" (concatenate 'string  "@" index)  "D=D+A" "A=D" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
-   ((string= segment "static")   (list (concatenate "@" *filename* index) "D=M" "R0" "A=M" "M=D" "@R0" "M=M+1"))
+   ((string= segment "local")    (list "@R1" "D=M" (concatenate 'string "@" index) "D=D+A" "A=D" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
+   ((string= segment "argument") (list "@R2" "D=M" (concatenate 'string "@" index) "D=D+A" "A=D" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
+   ((string= segment "this")     (list "@R3" "D=M" (concatenate 'string "@" index) "D=D+A" "A=D" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
+   ((string= segment "that")     (list "@R4" "D=M" (concatenate 'string "@" index) "D=D+A" "A=D" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
+   ((string= segment "pointer")  (list "@R3" "D=A" (concatenate 'string "@" index) "D=D+A" "A=D" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
+   ((string= segment "temp")     (list "@R5" "D=A" (concatenate 'string "@" index) "D=D+A" "A=D" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
+   ((string= segment "static")   (list (concatenate 'string "@" "StackTest." index) "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
   )
 )
 
 (defun writePop  (segment index)
   (cond
-   ((string= segment "local")    (list "@R1" "D=M" (concatenate 'string "@" index) "D=D+A" "@R1" "M=D" "@R0" "A=M-1" "D=M" "@R1" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R1" "M=M-D" "@R0" "M=M-1"))
-   ((string= segment "argument") (list "@R2" "D=M" (concatenate 'string "@" index) "D=D+A" "@R2" "M=D" "@R0" "A=M-1" "D=M" "@R2" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R2" "M=M-D" "@R0" "M=M-1"))
-   ((string= segment "this")     (list "@R3" "D=M" (concatenate 'string "@" index) "D=D+A" "@R3" "M=D" "@R0" "A=M-1" "D=M" "@R3" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R3" "M=M-D" "@R0" "M=M-1"))
-   ((string= segment "that")     (list "@R4" "D=M" (concatenate 'string "@" index) "D=D+A" "@R4" "M=D" "@R0" "A=M-1" "D=M" "@R4" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R4" "M=M-D" "@R0" "M=M-1"))
-   ((string= segment "pointer")  (list "@R3" "D=A" (concatenate 'string "@" index) "D=D+A" "@R3" "M=D" "@R0" "A=M-1" "D=M" "@R3" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R3" "M=M-D" "@R0" "M=M-1"))
-   ((string= segment "temp")     (list "@R5" "D=A" (concatenate 'string "@" index) "D=D+A" "@R5" "M=D" "@R0" "A=M-1" "D=M" "@R5" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R5" "M=M-D" "@R0" "M=M-1"))
-   ((string= segment "static")   (list "@R0" "A=M" "D=M" (concatenate "@" *filename* index) "M=D" "@R0" "M=M-1"))
+    ((string= segment "local")    (list "@R1" "D=M" (concatenate 'string "@" index) "D=D+A" "@R1" "M=D" "@R0" "A=M-1" "D=M" "@R1" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R1" "M=M-D" "@R0" "M=M-1"))
+    ((string= segment "argument") (list "@R2" "D=M" (concatenate 'string "@" index) "D=D+A" "@R2" "M=D" "@R0" "A=M-1" "D=M" "@R2" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R2" "M=M-D" "@R0" "M=M-1"))
+    ((string= segment "this")     (list "@R3" "D=M" (concatenate 'string "@" index) "D=D+A" "@R3" "M=D" "@R0" "A=M-1" "D=M" "@R3" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R3" "M=M-D" "@R0" "M=M-1"))
+    ((string= segment "that")     (list "@R4" "D=M" (concatenate 'string "@" index) "D=D+A" "@R4" "M=D" "@R0" "A=M-1" "D=M" "@R4" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R4" "M=M-D" "@R0" "M=M-1"))
+    ((string= segment "pointer")  (list "@R0" "M=M-1" "A=M" "D=M" (concatenate 'string "@" (write-to-string (+ (parse-integer index) 3))) "M=D"))
+    ((string= segment "temp")     (list "@R0" "M=M-1" "A=M" "D=M" (concatenate 'string "@" (write-to-string (+ (parse-integer index) 5))) "M=D"))
+    ((string= segment "static")   (list "@R0" "M=M-1" "A=M" "D=M" (concatenate 'string "@" "StackTest." index) "M=D"))
   )
 )
 
@@ -103,7 +103,6 @@
   )
 )
 
-; except call type
 (defun arg1 (line)
   (let ((c-type (commandType line)))
     (cond
@@ -117,7 +116,6 @@
   (cadr (ppcre:all-matches-as-strings "\\w+" line))
 )
 
-; except push, pop, function, call
 (defun arg2 (line)
   (caddr (ppcre:all-matches-as-strings "\\w+" line))
 )

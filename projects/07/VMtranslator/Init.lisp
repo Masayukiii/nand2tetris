@@ -9,7 +9,6 @@
 (ql:quickload :cl-ppcre)
 (format t "success~%")
 
-
 (defun loading (file)
   (format t "now loading ~a~%" file)
   (load file)
