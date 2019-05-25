@@ -14,6 +14,3 @@
   (load file)
   (format t "success~%")
 )
-
-(loading "CoderWriter.lisp")
-(loading "Parser.lisp")
