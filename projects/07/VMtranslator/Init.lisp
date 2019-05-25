@@ -1,5 +1,5 @@
 (format t "now loading quicklisp~%")
-(let ((quicklisp-init (merge-pathnames "quicklisp/setup.lisp"
+(let ((quicklisp-init (merge-pathnames ".emacs.d/quicklisp/setup.lisp"
                                        (user-homedir-pathname))))
   (when (probe-file quicklisp-init)
     (load quicklisp-init)))
