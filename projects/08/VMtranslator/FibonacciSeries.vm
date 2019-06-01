@@ -5,7 +5,7 @@
 
 // Puts the first argument[0] elements of the Fibonacci series
 // in the memory, starting in the address given in argument[1].
-// Argument[0] and argument[1] are initialized by the test script 
+// Argument[0] and argument[1] are initialized by the test script
 // before this code starts running.
 
 push argument 1
@@ -37,13 +37,13 @@ pop that 2              // that[2] = that[0] + that[1]
 push pointer 1
 push constant 1
 add
-pop pointer 1           // that += 1
+pop pointer 1           // that += 1  this is not working
 
 push argument 0
 push constant 1
 sub
 pop argument 0          // num_of_elements--
 
-goto MAIN_LOOP_START
+goto MAIN_LOOP_START  // ここも壊れてる可能性がある。
 
 label END_PROGRAM

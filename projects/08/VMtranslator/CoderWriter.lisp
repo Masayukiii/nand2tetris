@@ -36,8 +36,8 @@
     ((ppcre:scan "push"     line) (string :C_PUSH ))
     ((ppcre:scan "pop"      line) (string :C_POP ))
     ((ppcre:scan "label"    line) (string :C_LABEL ))
+    ((ppcre:scan "if-"  line) (string :C_IF )) ; if include goto , meet below condition
     ((ppcre:scan "goto"     line) (string :C_GOTO ))
-    ((ppcre:scan "if-goto"  line) (string :C_IF ))
     ((ppcre:scan "function" line) (string :C_FUNCTION ))
     ((ppcre:scan "return"   line) (string :C_RETURN ))
     ((ppcre:scan "call"     line) (string :C_CALL ))
@@ -68,21 +68,22 @@
    ((string= segment "argument") (list "@R2" "D=M" (concatenate 'string "@" index) "D=D+A" "A=D" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
    ((string= segment "this")     (list "@R3" "D=M" (concatenate 'string "@" index) "D=D+A" "A=D" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
    ((string= segment "that")     (list "@R4" "D=M" (concatenate 'string "@" index) "D=D+A" "A=D" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
-   ((string= segment "pointer")  (list "@R3" "D=A" (concatenate 'string "@" index) "D=D+A" "A=D" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
+   ((string= segment "pointer")  (list "@3" "D=A" (concatenate 'string "@" index) "D=D+A" "A=D" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
    ((string= segment "temp")     (list "@R5" "D=A" (concatenate 'string "@" index) "D=D+A" "A=D" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
    ((string= segment "static")   (list (concatenate 'string "@" "StaticTest." index) "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
   )
 )
 
 (defun convertPopAssmble  (segment index)
+  (format t "~a .. ~a ~%" segment index)
   (cond
     ((string= segment "local")    (list "@R1" "D=M" (concatenate 'string "@" index) "D=D+A" "@R1" "M=D" "@R0" "A=M-1" "D=M" "@R1" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R1" "M=M-D" "@R0" "M=M-1"))
     ((string= segment "argument") (list "@R2" "D=M" (concatenate 'string "@" index) "D=D+A" "@R2" "M=D" "@R0" "A=M-1" "D=M" "@R2" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R2" "M=M-D" "@R0" "M=M-1"))
     ((string= segment "this")     (list "@R3" "D=M" (concatenate 'string "@" index) "D=D+A" "@R3" "M=D" "@R0" "A=M-1" "D=M" "@R3" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R3" "M=M-D" "@R0" "M=M-1"))
-    ((string= segment "that")     (list "@R4" "D=M" (concatenate 'string "@" index) "D=D+A" "@R4" "M=D" "@R0" "A=M-1" "D=M" "@R4" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R4" "M=M-D" "@R0" "M=M-1"))
-    ((string= segment "pointer")  (list "@R0" "M=M-1" "A=M" "D=M" (concatenate 'string "@" (write-to-string (+ (parse-integer index) 3))) "M=D"))
+    ((string= segment "pointer")  (list "@R0" "M=M-1" "A=M" "D=M" (concatenate 'string "@" (write-to-string (+ (parse-integer index) 3))) "M=D")) ; @3のメモリ位置にpoinster用のR3があるかどうかはわからない気がする。それは任意に設定することができるから。
     ((string= segment "temp")     (list "@R0" "M=M-1" "A=M" "D=M" (concatenate 'string "@" (write-to-string (+ (parse-integer index) 5))) "M=D"))
     ((string= segment "static")   (list "@R0" "M=M-1" "A=M" "D=M" (concatenate 'string "@" "StaticTest." index) "M=D"))
+    ((string= segment "that")     (list "@R4" "D=M" (concatenate 'string "@" index) "D=D+A" "@R4" "M=D" "@R0" "A=M-1" "D=M" "@R4" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R4" "M=M-D" "@R0" "M=M-1"))
   )
 )
 
@@ -92,13 +93,14 @@
 
 (defun convertGotoAssmble (line)
   (let ((label-var (arg1 line)))
-    (list (concatenate 'string "@" label-var) "D=M" "A=D")
+    (format t "~a" (list (concatenate 'string "@" label-var) "D=M" "A=D"))
+    (list (concatenate 'string "@" label-var) "A=M")
   )
 )
 
 (defun convertIfAssmble (line)
-  (let ((des (arg1 line)))
-    (list "@R0" "M=M-1" "A=M" "D=M" (concatenate 'string "@" des) "D;JNQ")
+  (let ((des (arg2 line)))
+    (list "@R0" "M=M-1" "A=M" "D=M" (concatenate 'string "@" des) "D;JNE")
   )
 )
 
