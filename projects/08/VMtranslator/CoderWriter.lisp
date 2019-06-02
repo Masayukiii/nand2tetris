@@ -75,15 +75,16 @@
 )
 
 (defun convertPopAssmble  (segment index)
-  (format t "~a .. ~a ~%" segment index)
-  (cond
-    ((string= segment "local")    (list "@R1" "D=M" (concatenate 'string "@" index) "D=D+A" "@R1" "M=D" "@R0" "A=M-1" "D=M" "@R1" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R1" "M=M-D" "@R0" "M=M-1"))
-    ((string= segment "argument") (list "@R2" "D=M" (concatenate 'string "@" index) "D=D+A" "@R2" "M=D" "@R0" "A=M-1" "D=M" "@R2" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R2" "M=M-D" "@R0" "M=M-1"))
-    ((string= segment "this")     (list "@R3" "D=M" (concatenate 'string "@" index) "D=D+A" "@R3" "M=D" "@R0" "A=M-1" "D=M" "@R3" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R3" "M=M-D" "@R0" "M=M-1"))
-    ((string= segment "pointer")  (list "@R0" "M=M-1" "A=M" "D=M" (concatenate 'string "@" (write-to-string (+ (parse-integer index) 3))) "M=D")) ; @3のメモリ位置にpoinster用のR3があるかどうかはわからない気がする。それは任意に設定することができるから。
-    ((string= segment "temp")     (list "@R0" "M=M-1" "A=M" "D=M" (concatenate 'string "@" (write-to-string (+ (parse-integer index) 5))) "M=D"))
-    ((string= segment "static")   (list "@R0" "M=M-1" "A=M" "D=M" (concatenate 'string "@" "StaticTest." index) "M=D"))
-    ((string= segment "that")     (list "@R4" "D=M" (concatenate 'string "@" index) "D=D+A" "@R4" "M=D" "@R0" "A=M-1" "D=M" "@R4" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R4" "M=M-D" "@R0" "M=M-1"))
+  (let ((label1 (string (gensym))) (label2 (string (gensym))))
+    (cond
+      ((string= segment "local")    (list "@R1" "D=M" (concatenate 'string "@" index) "D=D+A" "@R1" "M=D" "@R0" "A=M-1" "D=M" "@R1" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R1" "M=M-D" "@R0" "M=M-1"))
+      ((string= segment "argument") (list "@R2" "D=M" (concatenate 'string "@" index) "D=D+A" "@R2" "M=D" "@R0" "A=M-1" "D=M" "@R2" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R2" "M=M-D" "@R0" "M=M-1"))
+      ((string= segment "this")     (list "@R3" "D=M" (concatenate 'string "@" index) "D=D+A" "@R3" "M=D" "@R0" "A=M-1" "D=M" "@R3" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R3" "M=M-D" "@R0" "M=M-1"))
+      ((string= segment "pointer")  (list (concatenate 'string "@" index) "D=A" (concatenate 'string "@" label1) "D;JEQ" "@R0" "A=M-1" "D=M" "@R4" "M=D" (concatenate 'string "@" label2) "0;JMP" (concatenate 'string "(" label1 ")") "@R0" "A=M-1" "D=M" "@R3" "M=D" (concatenate 'string "(" label2 ")") "@R0" "M=M-1"  ))
+      ((string= segment "temp")     (list "@R0" "M=M-1" "A=M" "D=M" (concatenate 'string "@" (write-to-string (+ (parse-integer index) 5))) "M=D"))
+      ((string= segment "static")   (list "@R0" "M=M-1" "A=M" "D=M" (concatenate 'string "@" "StaticTest." index) "M=D"))
+      ((string= segment "that")     (list "@R4" "D=M" (concatenate 'string "@" index) "D=D+A" "@R4" "M=D" "@R0" "A=M-1" "D=M" "@R4" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R4" "M=M-D" "@R0" "M=M-1"))
+    )
   )
 )
 
@@ -93,7 +94,7 @@
 
 (defun convertGotoAssmble (line)
   (let ((label-var (arg1 line)))
-    (format t "~a" (list (concatenate 'string "@" label-var) "D=M" "A=D"))
+    (format t "~a" (list (concatenate 'string "@" label-var) "A=M"))
     (list (concatenate 'string "@" label-var) "A=M")
   )
 )
