@@ -110,7 +110,7 @@
         (argument-count (arg2 line))
         (label1 (string (gensym)))
         (label2 (string (gensym))))
-    (list (concatenate 'string "@" argument-count) "D=A" (concatenate 'string "(" label1 ")") (concatenate 'string "@" label2) "D;JEQ" "@R0" "A=M" "M=0" "@R0" "M=M+1" "D=D-1" (concatenate 'string "@" label1) "0;JMP" (concatenate 'string "(" label2 ")"))
+    (list (concatenate 'string "(" function-name ")") (concatenate 'string "@" argument-count) "D=A" (concatenate 'string "(" label1 ")") (concatenate 'string "@" label2) "D;JEQ" "@R0" "A=M" "M=0" "@R0" "M=M+1" "D=D-1" (concatenate 'string "@" label1) "0;JMP" (concatenate 'string "(" label2 ")"))
   )
 )
 
@@ -147,7 +147,7 @@
           "@R4" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"
           "@R0" "D=M" (concatenate 'string "@" argument-count) "D=D-A" "@5" "D=D-A" "@R2" "M=D"
           "@R0" "D=M" "@R1" "M=D"
-          (concatenate 'string "@" f) "0;JMP"
+          (concatenate 'string "@" function-name) "0;JMP"
           (concatenate 'string "(" label1 ")")
         )
   )
