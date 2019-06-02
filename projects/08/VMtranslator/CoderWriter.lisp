@@ -106,12 +106,51 @@
 )
 
 (defun convertFunctionAssmble (line)
+  (let ((function-name (arg1 line))
+        (argument-count (arg2 line))
+        (label1 (string (gensym)))
+        (label2 (string (gensym))))
+    (list (concatenate 'string "@" argument-count) "D=A" (concatenate 'string "(" label1 ")") (concatenate 'string "@" label2) "D;JEQ" "@R0" "A=M" "M=0" "@R0" "M=M+1" "D=D-1" (concatenate 'string "@" label1) "0;JMP" (concatenate 'string "(" label2 ")"))
+  )
 )
 
 (defun convertReturnAssmble (line)
+  (let ((function-name (arg1 line))
+        (argument-count (arg2 line))
+        (label1 (string (gensym)))
+        (label2 (string (gensym))))
+        (list
+          ; TODO: obey last in, first out principle
+          ; R13-R15 segment is free segment
+          "@R0" "M=M-1" "D=M" "@R13" "M=D"
+          "@R0" "A=M" "D=M" "@R2" "A=M" "M=D"
+          "@R2" "D=M+1" "@R0" "M=D"
+          "@1" "D=A" "@R13" "D=M-D" "A=D" "D=M" "@R4" "M=D"
+          "@2" "D=A" "@R13" "D=M-D" "A=D" "D=M" "@R3" "M=D"
+          "@3" "D=A" "@R13" "D=M-D" "A=D" "D=M" "@R2" "M=D"
+          "@4" "D=A" "@R13" "D=M-D" "A=D" "D=M" "@R1" "M=D"
+          "@5" "D=A" "@R13" "D=M-D" "A=D" "A=M"
+        )
+  )
 )
 
 (defun convertCallAssmble (line)
+  (let ((function-name (arg1 line))
+        (argument-count (arg2 line))
+        (label1 (string (gensym)))
+        (label2 (string (gensym))))
+        (list
+          (concatenate 'string "@" label1) "D=A" "@R0" "A=M" "M=D" "@R0" "M=M+1" ; この前に引数をpushしているから気にする必要はない
+          "@R1" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"
+          "@R2" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"
+          "@R3" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"
+          "@R4" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"
+          "@R0" "D=M" (concatenate 'string "@" argument-count) "D=D-A" "@5" "D=D-A" "@R2" "M=D"
+          "@R0" "D=M" "@R1" "M=D"
+          (concatenate 'string "@" f) "0;JMP"
+          (concatenate 'string "(" label1 ")")
+        )
+  )
 )
 
 ; common function
