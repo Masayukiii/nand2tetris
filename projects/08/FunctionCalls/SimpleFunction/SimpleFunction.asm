@@ -1,5 +1,5 @@
-(SimpleFunction)
-@test
+(test)
+@2
 D=A
 (G11518)
 @G11519

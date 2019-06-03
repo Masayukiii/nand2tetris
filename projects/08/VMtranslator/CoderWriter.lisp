@@ -106,8 +106,8 @@
 )
 
 (defun convertFunctionAssmble (line)
-  (let ((function-name (arg1 line))
-        (argument-count (arg2 line))
+  (let ((function-name (arg2 line))
+        (argument-count (arg3 line))
         (label1 (string (gensym)))
         (label2 (string (gensym))))
     (list (concatenate 'string "(" function-name ")") (concatenate 'string "@" argument-count) "D=A" (concatenate 'string "(" label1 ")") (concatenate 'string "@" label2) "D;JEQ" "@R0" "A=M" "M=0" "@R0" "M=M+1" "D=D-1" (concatenate 'string "@" label1) "0;JMP" (concatenate 'string "(" label2 ")"))
@@ -116,7 +116,7 @@
 
 (defun convertReturnAssmble (line)
   (let ((function-name (arg1 line))
-        (argument-count (arg2 line))
+        (argument-count (arg2 line)) ; ここの数字設定がおかしい
         (label1 (string (gensym)))
         (label2 (string (gensym))))
         (list
@@ -163,10 +163,14 @@
   )
 )
 
-(defun GetArgument1 (line)
-  (cadr (ppcre:all-matches-as-strings "\\w+" line))
-)
-
 (defun arg2 (line)
   (caddr (ppcre:all-matches-as-strings "\\w+" line))
+)
+
+(defun arg3 (line)
+  (cadddr (ppcre:all-matches-as-strings "\\w+" line))
+)
+
+(defun GetArgument1 (line)
+  (cadr (ppcre:all-matches-as-strings "\\w+" line))
 )
