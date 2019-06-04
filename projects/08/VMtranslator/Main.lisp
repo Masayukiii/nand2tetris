@@ -1,5 +1,10 @@
 (load "Init.lisp")
 (defvar *file* (car *args*))
+; (format t "-----------------------------------------~%")
+; (format t "~a" *default-pathname-defaults*)
+; (format t "~a"  *LOAD-PATHNAME*)
+; (format t "~a"  *LOAD-TRUENAME*)
+; (format t "-----------------------------------------~%")
 
 (in-package :cl-user)
 (defpackage vmtranslator.main
