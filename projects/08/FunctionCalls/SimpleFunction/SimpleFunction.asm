@@ -1,4 +1,4 @@
-(test)
+(SimpleFunction.test)
 @2
 D=A
 (G11518)
@@ -93,13 +93,12 @@ A=M
 M=M-D
 @R0
 M=M+1
-@R0
-M=M-1
+@R1
 D=M
 @R13
 M=D
 @R0
-A=M
+A=M-1
 D=M
 @R2
 A=M
