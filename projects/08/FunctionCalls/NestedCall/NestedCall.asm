@@ -104,7 +104,7 @@ M=D
 M=M+1
 @R0
 D=M
-@main
+@0
 D=D-A
 @5
 D=D-A
@@ -114,7 +114,7 @@ M=D
 D=M
 @R1
 M=D
-@Sys
+@Sys.main
 0;JMP
 (G11524)
 @R0
@@ -314,7 +314,7 @@ M=D
 M=M+1
 @R0
 D=M
-@add12
+@1
 D=D-A
 @5
 D=D-A
@@ -324,7 +324,7 @@ M=D
 D=M
 @R1
 M=D
-@Sys
+@Sys.add12
 0;JMP
 (G11540)
 @R0

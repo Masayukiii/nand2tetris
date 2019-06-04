@@ -137,8 +137,9 @@
 )
 
 (defun convertCallAssmble (line)
-  (let ((function-name (arg1 line))
-        (argument-count (arg2 line))
+  (let  ((class-name (arg1 line))
+        (function-name (arg2 line))
+        (argument-count (arg3 line))
         (label1 (string (gensym)))
         (label2 (string (gensym))))
         (list
@@ -149,7 +150,7 @@
           "@R4" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"
           "@R0" "D=M" (concatenate 'string "@" argument-count) "D=D-A" "@5" "D=D-A" "@R2" "M=D"
           "@R0" "D=M" "@R1" "M=D"
-          (concatenate 'string "@" function-name) "0;JMP"
+          (concatenate 'string "@" class-name "." function-name) "0;JMP"
           (concatenate 'string "(" label1 ")")
         )
   )
