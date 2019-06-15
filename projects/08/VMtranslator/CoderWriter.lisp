@@ -94,8 +94,8 @@
 
 (defun convertGotoAssmble (line)
   (let ((label-var (arg1 line)))
-    (format t "~a" (list (concatenate 'string "@" label-var) "A=M"))
-    (list (concatenate 'string "@" label-var) "A=M")
+    (format t "~a" label-var)
+    (list (concatenate 'string "@" label-var) "0;JMP")
   )
 )
 
@@ -117,21 +117,22 @@
 
 (defun convertReturnAssmble (line)
   (let ((function-name (arg1 line))
-        (argument-count (arg2 line)) ; ここの数字設定がおかしい
+        (argument-count (arg2 line))
         (label1 (string (gensym)))
         (label2 (string (gensym))))
         (list
           ; TODO: obey last in, first out principle
           ; R13-R15 segment is free segment
-          ; ローカルメモリセグメントのアドレスは別に保存されている、ここはスタック領域とういうより、メモリ領域に近い感じ。
+
           "@R1" "D=M" "@R13" "M=D"
+          "@5" "D=A" "@R13" "D=M-D" "A=D" "D=M" "@R14" "M=D"
           "@R0" "A=M-1" "D=M" "@R2" "A=M" "M=D"
           "@R2" "D=M+1" "@R0" "M=D"
           "@1" "D=A" "@R13" "D=M-D" "A=D" "D=M" "@R4" "M=D"
           "@2" "D=A" "@R13" "D=M-D" "A=D" "D=M" "@R3" "M=D"
           "@3" "D=A" "@R13" "D=M-D" "A=D" "D=M" "@R2" "M=D"
           "@4" "D=A" "@R13" "D=M-D" "A=D" "D=M" "@R1" "M=D"
-          "@5" "D=A" "@R13" "D=M-D" "A=D" "A=M"
+          "@R14" "A=M" "0;JMP"
         )
   )
 )
@@ -143,7 +144,7 @@
         (label1 (string (gensym)))
         (label2 (string (gensym))))
         (list
-          (concatenate 'string "@" label1) "D=A" "@R0" "A=M" "M=D" "@R0" "M=M+1" ; この前に引数をpushしているから気にする必要はない
+          (concatenate 'string "@" label1) "D=A" "@R0" "A=M" "M=D" "@R0" "M=M+1"
           "@R1" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"
           "@R2" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"
           "@R3" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"
