@@ -7,8 +7,11 @@
 (in-package :vmtranslator.coderwriter)
 
 
-(defun convertAssmble (lines)
-  (mapcar #'convertAssmbleByInstructionType lines)
+(defun convertAssmble (lines name)
+  (progn
+    (defparameter *static-name* name)
+    (mapcar #'convertAssmbleByInstructionType lines)
+    )
 )
 
 (defun convertAssmbleByInstructionType (line)
@@ -73,7 +76,7 @@
    ((string= segment "that")     (list "@R4" "D=M" (concatenate 'string "@" index) "D=D+A" "A=D" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
    ((string= segment "pointer")  (list "@3" "D=A" (concatenate 'string "@" index) "D=D+A" "A=D" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
    ((string= segment "temp")     (list "@R5" "D=A" (concatenate 'string "@" index) "D=D+A" "A=D" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
-   ((string= segment "static")   (list (concatenate 'string "@" "StaticsTest." index) "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
+   ((string= segment "static")   (list (concatenate 'string "@" *static-name* "." index) "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
   )
 )
 
@@ -84,8 +87,8 @@
       ((string= segment "argument") (list "@R2" "D=M" (concatenate 'string "@" index) "D=D+A" "@R2" "M=D" "@R0" "A=M-1" "D=M" "@R2" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R2" "M=M-D" "@R0" "M=M-1"))
       ((string= segment "this")     (list "@R3" "D=M" (concatenate 'string "@" index) "D=D+A" "@R3" "M=D" "@R0" "A=M-1" "D=M" "@R3" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R3" "M=M-D" "@R0" "M=M-1"))
       ((string= segment "pointer")  (list (concatenate 'string "@" index) "D=A" (concatenate 'string "@" label1) "D;JEQ" "@R0" "A=M-1" "D=M" "@R4" "M=D" (concatenate 'string "@" label2) "0;JMP" (concatenate 'string "(" label1 ")") "@R0" "A=M-1" "D=M" "@R3" "M=D" (concatenate 'string "(" label2 ")") "@R0" "M=M-1"  ))
-      ((string= segment "temp")     (list "@R0" "M=M-1" "A=M" "D=M" (concatenate 'string "@" (write-to-string (+ (parse-integer index) 5))) "M=D"))
-      ((string= segment "static")   (list "@R0" "M=M-1" "A=M" "D=M" (concatenate 'string "@" "StaticsTest." index) "M=D"))
+      ((string= segment "temp")     (list "@R0" "M=M-1" "D=M" "A=D" "D=M" (concatenate 'string "@" (write-to-string (+ (parse-integer index) 5))) "M=D"))
+      ((string= segment "static")   (list "@R0" "M=M-1" "D=M" "A=D" "D=M" (concatenate 'string "@" *static-name* "." index) "M=D"))
       ((string= segment "that")     (list "@R4" "D=M" (concatenate 'string "@" index) "D=D+A" "@R4" "M=D" "@R0" "A=M-1" "D=M" "@R4" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R4" "M=M-D" "@R0" "M=M-1"))
     )
   )

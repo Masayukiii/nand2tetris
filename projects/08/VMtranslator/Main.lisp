@@ -1,10 +1,5 @@
 (load "Init.lisp")
-(defvar *file* (car *args*))
-; (format t "-----------------------------------------~%")
-; (format t "~a" *default-pathname-defaults*)
-; (format t "~a"  *LOAD-PATHNAME*)
-; (format t "~a"  *LOAD-TRUENAME*)
-; (format t "-----------------------------------------~%")
+(defvar *name* (car *args*))
 
 (in-package :cl-user)
 (defpackage vmtranslator.main
@@ -32,7 +27,7 @@
 
 (defun writeAsm (lst)
   (let
-    ((outStream (open (concatenate 'string *file* ".asm") :direction :output)))
+    ((outStream (open (concatenate 'string *name* ".asm") :direction :output)))
     (writeLine outStream lst)
   )
 )
@@ -44,15 +39,28 @@
   )
 )
 
-(defun flatten (lst)
-  (cond ((null lst) nil)
-        ((atom lst) (list lst))
-        (t (loop for a in lst append (flatten a)))
-  )
+(defvar *name* cl-user::*name*)
+
+(defvar *target-directory* (directory (format nil "C:/Users/sekai/.ghq/github.com/Masayukiii/nand2tetris/projects/08/FunctionCalls/~a/*.vm" *name*)))
+
+(defun flatten (lst acum)
+  (cond
+    ((null lst) acum)
+    (t (flatten (cdr lst) (append acum (car lst))))
+    )
 )
 
-(defvar *file* cl-user::*file*)
+(defun get-vm-name (path)
+    (svref (nth-value 1 (ppcre:scan-to-strings "(.+).vm" (file-namestring path))) 0)
+  )
 
-(defvar *lists* (getLines *file*))
+(defparameter vm-names (mapcar #'get-vm-name *target-directory*))
+(defparameter lines    (mapcar #'getLines *target-directory*))
 
-(writeAsm (flatten (convertAssmble (parse *lists*))))
+(defparameter vm-info (mapcar #'cons vm-names lines))
+
+(defun convert (lst)
+   (flatten (convertAssmble (parse (cdr lst)) (car lst)) nil)
+)
+
+(writeAsm (flatten (mapcar #'convert vm-info) nil))
