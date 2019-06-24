@@ -483,7 +483,8 @@ D=M
 @R1
 M=D
 @R14
-A=M
+D=M
+A=D
 0;JMP
 (Sys.add12)
 @0
@@ -637,5 +638,6 @@ D=M
 @R1
 M=D
 @R14
-A=M
+D=M
+A=D
 0;JMP

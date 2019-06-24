@@ -47,8 +47,10 @@
 
 (defun convertArithmeticAssmble (line)
   (let ((label1 (string (gensym))) (label2 (string (gensym))))
+   (progn
+     (format t "~a~%" (arg1 line))
     (cond
-      ((string= (arg1 line) "add")(list  "@R0" "M=M-1" "A=M" "D=M" "@R0" "M=M-1" "A=M" "M=M+D" "@R0" "M=M+1"))
+      ((string= (arg1 line) "add")(format t "addddddddddddddddddddddddddddddddddddddddddddddddddddd") (list  "@R0" "M=M-1" "A=M" "D=M" "@R0" "M=M-1" "A=M" "M=M+D" "@R0" "M=M+1"))
       ((string= (arg1 line) "sub")(list  "@R0" "M=M-1" "A=M" "D=M" "@R0" "M=M-1" "A=M" "M=M-D" "@R0" "M=M+1"))
       ((string= (arg1 line) "neg")(list  "@R0" "M=M-1" "A=M" "M=-M" "@R0" "M=M+1"))
       ((string= (arg1 line) "eq" )(list  "@R0" "M=M-1" "A=M" "D=M" "@R0" "M=M-1" "A=M" "D=M-D"  (concatenate 'string "@" label1) "D;JEQ" "@R0" "A=M" "M=0" "@R0" "M=M+1" (concatenate 'string "@" label2) "0;JMP" (concatenate 'string "(" label1 ")") "@R0" "A=M" "M=-1" "@R0" "M=M+1" (concatenate 'string "(" label2 ")") ))
@@ -57,6 +59,7 @@
       ((string= (arg1 line) "and")(list  "@R0" "M=M-1" "A=M" "D=M" "@R0" "M=M-1" "A=M" "M=D&M" "@R0" "M=M+1"))
       ((string= (arg1 line) "or" )(list  "@R0" "M=M-1" "A=M" "D=M" "@R0" "M=M-1" "A=M" "M=D|M" "@R0" "M=M+1"))
       ((string= (arg1 line) "not")(list "@R0" "M=M-1" "A=M" "M=!M" "@R0" "M=M+1"))
+    )
     )
   )
 )
@@ -70,7 +73,7 @@
    ((string= segment "that")     (list "@R4" "D=M" (concatenate 'string "@" index) "D=D+A" "A=D" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
    ((string= segment "pointer")  (list "@3" "D=A" (concatenate 'string "@" index) "D=D+A" "A=D" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
    ((string= segment "temp")     (list "@R5" "D=A" (concatenate 'string "@" index) "D=D+A" "A=D" "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
-   ((string= segment "static")   (list (concatenate 'string "@" "StaticTest." index) "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
+   ((string= segment "static")   (list (concatenate 'string "@" "StaticsTest." index) "D=M" "@R0" "A=M" "M=D" "@R0" "M=M+1"))
   )
 )
 
@@ -82,7 +85,7 @@
       ((string= segment "this")     (list "@R3" "D=M" (concatenate 'string "@" index) "D=D+A" "@R3" "M=D" "@R0" "A=M-1" "D=M" "@R3" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R3" "M=M-D" "@R0" "M=M-1"))
       ((string= segment "pointer")  (list (concatenate 'string "@" index) "D=A" (concatenate 'string "@" label1) "D;JEQ" "@R0" "A=M-1" "D=M" "@R4" "M=D" (concatenate 'string "@" label2) "0;JMP" (concatenate 'string "(" label1 ")") "@R0" "A=M-1" "D=M" "@R3" "M=D" (concatenate 'string "(" label2 ")") "@R0" "M=M-1"  ))
       ((string= segment "temp")     (list "@R0" "M=M-1" "A=M" "D=M" (concatenate 'string "@" (write-to-string (+ (parse-integer index) 5))) "M=D"))
-      ((string= segment "static")   (list "@R0" "M=M-1" "A=M" "D=M" (concatenate 'string "@" "StaticTest." index) "M=D"))
+      ((string= segment "static")   (list "@R0" "M=M-1" "A=M" "D=M" (concatenate 'string "@" "StaticsTest." index) "M=D"))
       ((string= segment "that")     (list "@R4" "D=M" (concatenate 'string "@" index) "D=D+A" "@R4" "M=D" "@R0" "A=M-1" "D=M" "@R4" "A=M" "M=D" (concatenate 'string "@" index) "D=A" "@R4" "M=M-D" "@R0" "M=M-1"))
     )
   )
@@ -101,8 +104,11 @@
 
 (defun convertIfAssmble (line)
   (let ((des (arg2 line)))
-    (list "@R0" "M=M-1" "A=M" "D=M" (concatenate 'string "@" des) "D;JNE")
-  )
+    (format t "--------------------------------------------")
+    (format t "~a" des)
+    (format t "--------------------------------------------")
+    (list "@R0" "M=M-1" "A=M" "D=M" "@R0" "M=M+1" (concatenate 'string "@" des) "D;JNE")
+    )
 )
 
 (defun convertFunctionAssmble (line)
@@ -126,7 +132,7 @@
 
           "@R1" "D=M" "@R13" "M=D"
           "@5" "D=A" "@R13" "D=M-D" "A=D" "D=M" "@R14" "M=D"
-          "@R0" "A=M-1" "D=M" "@R2" "A=M" "M=D"
+          "@R0" "D=M-1" "A=D" "D=M" "@R2" "A=M" "M=D"
           "@R2" "D=M+1" "@R0" "M=D"
           "@1" "D=A" "@R13" "D=M-D" "A=D" "D=M" "@R4" "M=D"
           "@2" "D=A" "@R13" "D=M-D" "A=D" "D=M" "@R3" "M=D"
@@ -161,7 +167,7 @@
 (defun arg1 (line)
   (let ((c-type (commandType line)))
     (cond
-      ((string= c-type (string :C_ARITHMETIC)) line)
+      ((string= c-type (string :C_ARITHMETIC)) (car (ppcre:all-matches-as-strings "\\w+" line)))
       (t (GetArgument1 line))
     )
   )
