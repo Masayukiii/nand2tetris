@@ -9,8 +9,9 @@
   (let*
     ((normalized-content (normalize-content content))
      (insufficient-tokens (cl-ppcre:split "\\s+" normalized-content))
-     (normalized-tokens (normalize-tokens insufficient-tokens)))
-     normalized-tokens))
+     (normalized-tokens (normalize-tokens insufficient-tokens))
+     (xml-tokens (convert-xml normalized-tokens)))
+     xml-tokens))
 
 (defun normalize-content (content)
   (replace-with-space (remove-comment content) *symbol-token*))
@@ -41,6 +42,13 @@
     (t (flatten (cdr lst) (append acum (car lst))))
     ))
 
+(defun flatten-atom (lst accum)
+  (cond
+    ((null lst) (reverse accum))
+    ((consp (car lst)) (flatten-atom (cdr lst) (reverse (flatten-atom (car lst) accum))))
+    (t (flatten-atom (cdr lst) (cons (car lst) accum)))
+    ))
+
 (defun concatenate-string-token (tokens accum)
   (cond
     ((null tokens) (reverse accum))
@@ -59,3 +67,34 @@
   (cond
     ((null lst) "")
     (t (concatenate 'string (car lst) " " (concatenate-list (cdr lst))))))
+
+(defun convert-xml (tokens)
+  (let ((nested-tokens (list "<tokens>" (mapcar #'encode-symbol-for-xml (mapcar #'convert-xml-format tokens)) "</tokens>")))
+    (flatten-atom nested-tokens nil)))
+
+(defun convert-xml-format (token)
+  (let ((token-type (terminal-type token)))
+    (concatenate 'string "<" token-type ">" " " token " " "</" token-type ">")
+  ))
+
+(defun encode-symbol-for-xml (token)
+  (cond
+    ((equal token "<symbol> < </symbol>") "<symbol> &lt; </symbol>")
+    ((equal token "<symbol> > </symbol>") "<symbol> &gt; </symbol>")
+    ((equal token "<symbol> & </symbol>") "<symbol> &amp; </symbol>")
+    (t token)
+    ))
+
+(defun terminal-type (token)
+  (cond
+    ((find-equal-char token *keyword-token*) "keyword")
+    ((find-equal-char token *symbol-token*) "symbol")
+    ((ppcre:scan "\\d+" token) "integerConstant")
+    ((ppcre:scan "\"" token) "stringConstant")
+    (t "identifier")
+    )
+)
+
+(defun find-equal-char (char lst)
+  (some (lambda (c) (equal c char)) lst)
+)

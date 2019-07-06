@@ -43,4 +43,4 @@
      (write-lst-to-file (concatenate 'string file-name ".xml") tokens)
    ))
 
-(main "hoge.jack")
+(main "aaa.jack")
